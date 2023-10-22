@@ -6,216 +6,193 @@ import android.widget.Button
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+    lateinit var tv_result:TextView
+    lateinit var tv_cal:TextView
+    var arg1 = 0
+    var arg2 = 0
+    private var Result = 0
+    var preCal = 5
+    var curCal = 5
+    var error = false
+    var isResult = false
+    private fun reset(){
+        arg1 = 0
+        arg2 = 0
+        Result = 0
+        preCal = 5
+        curCal = 5
+        error = false
+        isResult = false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val tv_result: TextView = findViewById<TextView>(R.id.tv_result)
-        val tv_cal: TextView = findViewById<TextView>(R.id.tv_cal)
-        var preResult = 0;
-        var cal = -1;
+        tv_result = findViewById<TextView>(R.id.tv_result)
+        tv_cal = findViewById<TextView>(R.id.tv_cal)
+
         findViewById<Button>(R.id.btn_0).setOnClickListener {
-            if (tv_result.text.toString().toInt() != 0)
-            tv_result.text = tv_result.text.toString() + "0"
+            clickDigit("0")
         }
         findViewById<Button>(R.id.btn_1).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "1";
-            }else{
-                tv_result.text = tv_result.text.toString() + "1";
-            }
-
+            clickDigit("1")
         }
         findViewById<Button>(R.id.btn_2).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "2";
-            }else{
-                tv_result.text = tv_result.text.toString() + "2";
-            }
+            clickDigit("2")
         }
         findViewById<Button>(R.id.btn_3).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "3";
-            }else{
-                tv_result.text = tv_result.text.toString() + "3";
-            }
+            clickDigit("3")
         }
         findViewById<Button>(R.id.btn_4).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "4";
-            }else{
-                tv_result.text = tv_result.text.toString() + "4";
-            }
+            clickDigit("4")
         }
         findViewById<Button>(R.id.btn_5).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "5";
-            }else{
-                tv_result.text = tv_result.text.toString() + "5";
-            }
+            clickDigit("5")
         }
         findViewById<Button>(R.id.btn_6).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "6";
-            }else{
-                tv_result.text = tv_result.text.toString() + "6";
-            }
+            clickDigit("6")
         }
         findViewById<Button>(R.id.btn_7).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "7";
-            }else{
-                tv_result.text = tv_result.text.toString() + "7";
-            }
+            clickDigit("7")
         }
         findViewById<Button>(R.id.btn_8).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "8";
-            }else{
-                tv_result.text = tv_result.text.toString() + "8";
-            }
+            clickDigit("8")
         }
         findViewById<Button>(R.id.btn_9).setOnClickListener {
-            if(tv_result.text.toString().toInt() == 0){
-                tv_result.text =  "9";
-            }else{
-                tv_result.text = tv_result.text.toString() + "9";
-            }
+            clickDigit("9")
         }
         findViewById<Button>(R.id.btn_ce).setOnClickListener {
-            tv_result.text = "0";
+            if (error){
+                reset()
+                tv_cal.text = ""
+                tv_result.text = "0"
+            }
+            tv_result.text = "0"
         }
         findViewById<Button>(R.id.btn_c).setOnClickListener {
-            tv_cal.text = "";
-            tv_result.text = "0";
+            tv_cal.text = ""
+            tv_result.text = "0"
+            reset();
         }
         findViewById<Button>(R.id.btn_bs).setOnClickListener {
-            if (tv_result.text.length == 1){
-                tv_result.text = "0";
-            }else{
-                tv_result.text = tv_result.text.subSequence(0,tv_result.text.length-1).toString();
+            if (error){
+                reset()
+                tv_cal.text = ""
+                tv_result.text = "0"
             }
-
+            isResult = false
+            tv_result.text = (tv_result.text.toString().toInt() / 10).toString();
         }
         findViewById<Button>(R.id.btn_add).setOnClickListener {
-            if (tv_cal.text.toString().compareTo("") == 0){
-                tv_cal.text = tv_result.text.toString() + " + ";
-            }else{
-                if (cal == 5) {
-                    tv_cal.text = tv_result.text.toString() + " + ";
-                    tv_result.text = "0";
-                }else if (cal == 1){
-                    preResult = preResult + tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " + ";
-                }else if (cal == 2){
-                    preResult = preResult - tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " + ";
-                }else if (cal == 3){
-                    preResult = preResult * tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " + ";
-                }else if (cal == 4){
-                    preResult = preResult / tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " + ";
-                }
-            }
-            tv_result.text = "0";
-            cal = 1;
+            calExec(1, " + ")
         }
         findViewById<Button>(R.id.btn_sub).setOnClickListener {
-            if (tv_cal.text.toString().compareTo("") == 0){
-                tv_cal.text = tv_result.text.toString() + " - ";
-                tv_result.text = "0";
-            }else{
-                if (cal == 5) {
-                    tv_cal.text = tv_result.text.toString() + " - ";
-                    tv_result.text = "0";
-                }else if (cal == 1){
-                    preResult = preResult + tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " - ";
-                }else if (cal == 2){
-                    preResult = preResult - tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " - ";
-                }else if (cal == 3){
-                    preResult = preResult * tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " - ";
-                }else if (cal == 4){
-                    preResult = preResult / tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " - ";
-                }
-            }
-            tv_result.text = "0";
-            cal = 2;
+            calExec(2, " - ")
         }
         findViewById<Button>(R.id.btn_X).setOnClickListener {
-            if (tv_cal.text.toString().compareTo("") == 0){
-                tv_cal.text = tv_result.text.toString() + " x ";
-            }else{
-                if (cal == 5) {
-                    tv_cal.text = tv_result.text.toString() + " x ";
-                    tv_result.text = "0";
-                }else if (cal == 1){
-                    preResult = preResult + tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " x ";
-                }else if (cal == 2){
-                    preResult = preResult - tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " x ";
-                }else if (cal == 3){
-                    preResult = preResult * tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " x ";
-                }else if (cal == 4){
-                    preResult = preResult / tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " x ";
-                }
-            }
-            tv_result.text = "0";
-            cal = 3;
+            calExec(3, " x ")
         }
         findViewById<Button>(R.id.btn_devide).setOnClickListener {
-            if (tv_cal.text.toString().compareTo("") == 0){
-                tv_cal.text = tv_result.text.toString() + " / ";
-            }else{
-                if (cal == 5) {
-                    tv_cal.text = tv_result.text.toString() + " / ";
-                    tv_result.text = "0";
-                }else if (cal == 1){
-                    preResult = preResult + tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " / ";
-                }else if (cal == 2){
-                    preResult = preResult - tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " / ";
-                }else if (cal == 3){
-                    preResult = preResult * tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " / ";
-                }else if (cal == 4){
-                    preResult = preResult / tv_result.text.toString().toInt();
-                    tv_cal.text = preResult.toString() + " / ";
-                }
-            }
-            tv_result.text = "0";
-            cal = 4;
+            calExec(4, " / ")
         }
         findViewById<Button>(R.id.btn_result).setOnClickListener {
-            if (tv_cal.text.toString().compareTo("") == 0){
-                tv_cal.text = tv_result.text.toString();
+            preCal = curCal
+            curCal = 5
+            if (error){
+                reset()
+                tv_cal.text = ""
+                tv_result.text = "0"
+            }
+            if(preCal == 5){
+                Result = tv_result.text.toString().toInt()
+                tv_cal.text = Result.toString() +" = "
+                tv_result.text = Result.toString()
+            }else if(preCal == 1){
+                arg2 = tv_result.text.toString().toInt()
+                Result = arg1 + arg2
+                tv_cal.text = arg1.toString() + " + " + arg2.toString() + " = "
+                tv_result.text = Result.toString()
+            }else if(preCal == 2){
+                arg2 = tv_result.text.toString().toInt()
+                Result = arg1 - arg2
+                tv_cal.text = arg1.toString() + " - " + arg2.toString() + " = "
+                tv_result.text = Result.toString()
+            }else if(preCal == 3){
+                arg2 = tv_result.text.toString().toInt()
+                Result = arg1 * arg2
+                tv_cal.text = arg1.toString() + " x " + arg2.toString() + " = "
+                tv_result.text = Result.toString()
             }else{
-                if (cal == 5) {
-                    tv_cal.text = tv_result.text.toString();
-                    tv_result.text = "0";
-                }else if (cal == 1){
-                    tv_cal.text = preResult.toString() + " + " + tv_result.text.toString() +" = ";
-                    preResult = preResult + tv_result.text.toString().toInt();
-                }else if (cal == 2){
-                    tv_cal.text = preResult.toString() + " - " + tv_result.text.toString() +" = ";
-                    preResult = preResult - tv_result.text.toString().toInt();
-                }else if (cal == 3){
-                    tv_cal.text = preResult.toString() + " x " + tv_result.text.toString() +" = ";
-                    preResult = preResult * tv_result.text.toString().toInt();
-                }else if (cal == 4){
-                    tv_cal.text = preResult.toString() + " / " + tv_result.text.toString() +" = ";
-                    preResult = preResult / tv_result.text.toString().toInt();
+                arg2 = tv_result.text.toString().toInt()
+                if (arg2 == 0){
+                    tv_result.text = "Can't not devide by 0"
+                    error = true
+                    tv_cal.text = arg1.toString() + " / " + arg2.toString() + " = "
+                }else{
+                    Result = arg1 / arg2
+                    tv_cal.text = arg1.toString() + " / " + arg2.toString() + " = "
+                    tv_result.text = Result.toString()
                 }
             }
-            tv_result.text = preResult.toString();
-            cal = 5;
+            arg1 = Result
+        }
+    }
+    fun calExec(cal: Int, calSymbol: String ){
+        preCal = curCal
+        curCal = cal
+        if (error){
+            reset()
+            tv_cal.text = ""
+            tv_result.text = "0"
+        }
+        if(preCal == 5){
+            Result = tv_result.text.toString().toInt()
+            tv_cal.text = Result.toString() +calSymbol
+            tv_result.text = Result.toString()
+        }else if(preCal == 1){
+            arg2 = tv_result.text.toString().toInt()
+            Result = arg1 + arg2
+            tv_cal.text = Result.toString() +calSymbol
+            tv_result.text = Result.toString()
+        }else if(preCal == 2){
+            arg2 = tv_result.text.toString().toInt()
+            Result = arg1 - arg2
+            tv_cal.text = Result.toString() +calSymbol
+            tv_result.text = Result.toString()
+        }else if(preCal == 3){
+            arg2 = tv_result.text.toString().toInt()
+            Result = arg1 * arg2
+            tv_cal.text = Result.toString() +calSymbol
+            tv_result.text = Result.toString()
+        }else{
+            arg2 = tv_result.text.toString().toInt()
+            if (arg2 == 0){
+                tv_result.text = "Can't not devide by 0"
+                error = true
+                tv_cal.text = arg1.toString() + " / " + arg2.toString() +calSymbol
+            }else{
+                Result = arg1 / arg2
+                tv_cal.text = Result.toString() +calSymbol
+                tv_result.text = Result.toString()
+            }
+        }
+        arg1 = Result
+        isResult = true
+    }
+    fun clickDigit(digit:String){
+        if (error){
+            reset()
+            tv_cal.text = ""
+            tv_result.text = "0"
+        }else{
+            if (tv_result.text.toString().toInt() == 0){
+                tv_result.text = digit
+            }else if(isResult){
+                tv_result.text = digit
+                isResult = false
+            }
+            else{
+                tv_result.text = tv_result.text.toString() + digit
+            }
         }
     }
 }
